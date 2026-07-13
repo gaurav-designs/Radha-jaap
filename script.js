@@ -6,24 +6,6 @@ let today = new Date().toDateString();
 
 let history = JSON.parse(localStorage.getItem("history")) || {};
 
-let streak = Number(localStorage.getItem("streak")) || 0;
-let lastJaapDate = localStorage.getItem("lastJaapDate") || "";
-
-
-function updateStreak(){
-
-    let todayDate = new Date().toDateString();
-
-    if(lastJaapDate !== todayDate){
-
-        streak++;
-
-        localStorage.setItem("streak", streak);
-        localStorage.setItem("lastJaapDate", todayDate);
-
-    }
-
-}
 
 
 let lastDay = localStorage.getItem("lastDay") || "";
