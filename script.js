@@ -1,0 +1,175 @@
+let count = Number(localStorage.getItem("jaapCount")) || 0;
+let mala = Number(localStorage.getItem("malaCount")) || 0;
+let goal = Number(localStorage.getItem("dailyGoal")) || 108;
+
+let today = new Date().toDateString();
+
+let history = JSON.parse(localStorage.getItem("history")) || {};
+
+let streak = Number(localStorage.getItem("streak")) || 0;
+let lastJaapDate = localStorage.getItem("lastJaapDate") || "";
+
+
+function updateStreak(){
+
+    let todayDate = new Date().toDateString();
+
+    if(lastJaapDate !== todayDate){
+
+        streak++;
+
+        localStorage.setItem("streak", streak);
+        localStorage.setItem("lastJaapDate", todayDate);
+
+    }
+
+}
+
+
+let lastDay = localStorage.getItem("lastDay") || "";
+
+if(lastDay !== today){
+
+    if(lastDay !== ""){
+        streak++;
+    }
+
+    localStorage.setItem("streak", streak);
+    localStorage.setItem("lastDay", today);
+
+}
+
+const countDisplay = document.getElementById("count");
+const malaDisplay = document.getElementById("malaCount");
+const dailyGoal = document.getElementById("dailyGoal");
+const lifetimeDisplay = document.getElementById("lifetime");
+const progressBar = document.getElementById("progressBar");
+const progressText = document.getElementById("progressText");
+const todayDate = document.getElementById("todayDate");
+const todayJaap = document.getElementById("todayJaap");
+const streakDisplay = document.getElementById("streak");
+
+
+if(!history[today]){
+    history[today] = 0;
+}
+
+
+function updateScreen(){
+
+countDisplay.innerHTML = count;
+malaDisplay.innerHTML = mala + " / 108";
+dailyGoal.innerHTML = count + " / " + goal;
+lifetimeDisplay.innerHTML = count;
+
+todayDate.innerHTML = today;
+todayJaap.innerHTML = "Aaj ka Jaap: " + history[today];
+
+streakDisplay.innerHTML = streak + " Days";
+
+
+let percent = Math.floor((count / goal) * 100);
+
+if(percent > 100){
+percent = 100;
+}
+
+progressBar.style.width = percent + "%";
+progressText.innerHTML = percent + "%";
+
+}
+
+
+updateScreen();
+
+
+
+document.getElementById("jaapBtn").addEventListener("click",function(){
+
+count++;
+mala++;
+
+updateStreak();
+
+if(mala > 108){
+mala = 1;
+}
+
+
+history[today]++;
+
+
+localStorage.setItem("jaapCount",count);
+localStorage.setItem("malaCount",mala);
+localStorage.setItem("history",JSON.stringify(history));
+
+
+updateScreen();
+
+
+if(navigator.vibrate){
+navigator.vibrate(80);
+}
+
+});
+
+
+
+document.getElementById("setGoal").addEventListener("click",function(){
+
+let input = document.getElementById("goalInput").value;
+
+if(input > 0){
+
+goal = Number(input);
+
+localStorage.setItem("dailyGoal",goal);
+
+updateScreen();
+
+}
+
+});
+// Notes System
+
+let notes = document.getElementById("notes");
+let saveNotes = document.getElementById("saveNotes");
+
+
+notes.value = localStorage.getItem("myNotes") || "";
+
+
+saveNotes.addEventListener("click", function(){
+
+    localStorage.setItem("myNotes", notes.value);
+
+    alert("📝 Notes Saved");
+
+});
+function resetApp(){
+
+    localStorage.clear();
+
+    location.reload();
+
+}
+// Daily Reminder
+
+let reminderBtn = document.getElementById("reminderBtn");
+
+reminderBtn.addEventListener("click", async function(){
+
+    if(Notification.permission !== "granted"){
+
+        let permission = await Notification.requestPermission();
+
+        if(permission !== "granted"){
+            alert("Notification allow karo");
+            return;
+        }
+
+    }
+
+    alert("🔔 Daily Reminder Enabled");
+
+});
