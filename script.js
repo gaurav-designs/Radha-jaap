@@ -89,10 +89,9 @@ document.getElementById("jaapBtn").addEventListener("click",function(){
 count++;
 mala++;
 
-updateStreak();
-
 if(mala > 108){
-mala = 1;
+    mala = 1;
+    updateStreak();
 }
 
 
