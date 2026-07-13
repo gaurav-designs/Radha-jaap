@@ -89,11 +89,13 @@ document.getElementById("jaapBtn").addEventListener("click",function(){
 count++;
 mala++;
 
-if(mala > 108){
-    mala = 1;
+if(mala == 108){
     updateStreak();
 }
 
+if(mala > 108){
+    mala = 0;
+}
 
 history[today]++;
 
