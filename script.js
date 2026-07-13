@@ -6,27 +6,8 @@ let today = new Date().toDateString();
 
 let history = JSON.parse(localStorage.getItem("history")) || {};
 
-let streak = Number(localStorage.getItem("streak")) || 0;
 
-
-function updateStreak(){
-
-    let todayDate = new Date().toDateString();
-
-    let streakDate = localStorage.getItem("streakDate") || "";
-
-    if(streakDate !== todayDate){
-
-        streak++;
-
-        localStorage.setItem("streak", streak);
-        localStorage.setItem("streakDate", todayDate);
-
-    }
-
-}
-
-
+// Elements
 
 const countDisplay = document.getElementById("count");
 const malaDisplay = document.getElementById("malaCount");
@@ -36,7 +17,6 @@ const progressBar = document.getElementById("progressBar");
 const progressText = document.getElementById("progressText");
 const todayDate = document.getElementById("todayDate");
 const todayJaap = document.getElementById("todayJaap");
-const streakDisplay = document.getElementById("streak");
 
 
 if(!history[today]){
@@ -44,89 +24,77 @@ if(!history[today]){
 }
 
 
+// Update Screen
 
 function updateScreen(){
 
-countDisplay.innerHTML = count;
+    countDisplay.innerHTML = count;
 
-malaDisplay.innerHTML = mala + " / 108";
+    malaDisplay.innerHTML = mala + " / 108";
 
-dailyGoal.innerHTML = count + " / " + goal;
+    dailyGoal.innerHTML = count + " / " + goal;
 
-lifetimeDisplay.innerHTML = count;
+    lifetimeDisplay.innerHTML = count;
 
-todayDate.innerHTML = today;
+    todayDate.innerHTML = today;
 
-todayJaap.innerHTML = "Aaj ka Jaap: " + history[today];
-
-streakDisplay.innerHTML = streak + " Days";
+    todayJaap.innerHTML = "Aaj ka Jaap: " + history[today];
 
 
-let percent = Math.floor((count / goal) * 100);
+    let percent = Math.floor((count / goal) * 100);
 
-if(percent > 100){
-    percent = 100;
+
+    if(percent > 100){
+        percent = 100;
+    }
+
+
+    progressBar.style.width = percent + "%";
+
+    progressText.innerHTML = percent + "%";
+
 }
-
-progressBar.style.width = percent + "%";
-
-progressText.innerHTML = percent + "%";
-
-
-}
-
 
 
 updateScreen();
 
 
+
+// Jaap Button
 
 document.getElementById("jaapBtn").addEventListener("click",function(){
 
 
-count++;
+    count++;
 
-mala++;
-
-
-
-if(mala == 108){
-
-    updateStreak();
-
-}
+    mala++;
 
 
+    if(mala >= 108){
 
-if(mala > 108){
+        mala = 0;
 
-    mala = 0;
-
-}
-
+    }
 
 
-history[today]++;
+    history[today]++;
 
 
+    localStorage.setItem("jaapCount",count);
 
-localStorage.setItem("jaapCount",count);
+    localStorage.setItem("malaCount",mala);
 
-localStorage.setItem("malaCount",mala);
-
-localStorage.setItem("history",JSON.stringify(history));
-
+    localStorage.setItem("history",JSON.stringify(history));
 
 
-updateScreen();
+    updateScreen();
 
 
+    if(navigator.vibrate){
 
-if(navigator.vibrate){
+        navigator.vibrate(40);
 
-    navigator.vibrate(40);
-
-}
+    }
 
 
 });
@@ -134,22 +102,23 @@ if(navigator.vibrate){
 
 
 
+// Goal Button
 
 document.getElementById("setGoal").addEventListener("click",function(){
 
 
-let input = document.getElementById("goalInput").value;
+    let input = document.getElementById("goalInput").value;
 
 
-if(input > 0){
+    if(input > 0){
 
-goal = Number(input);
+        goal = Number(input);
 
-localStorage.setItem("dailyGoal",goal);
+        localStorage.setItem("dailyGoal",goal);
 
-updateScreen();
+        updateScreen();
 
-}
+    }
 
 
 });
@@ -157,6 +126,7 @@ updateScreen();
 
 
 
+// Notes
 
 let notes = document.getElementById("notes");
 
@@ -166,14 +136,13 @@ let saveNotes = document.getElementById("saveNotes");
 notes.value = localStorage.getItem("myNotes") || "";
 
 
-
 saveNotes.addEventListener("click",function(){
 
 
-localStorage.setItem("myNotes",notes.value);
+    localStorage.setItem("myNotes",notes.value);
 
 
-alert("📝 Notes Saved");
+    alert("📝 Notes Saved");
 
 
 });
@@ -181,11 +150,12 @@ alert("📝 Notes Saved");
 
 
 
+// Reset
 
 function resetApp(){
 
-localStorage.clear();
+    localStorage.clear();
 
-location.reload();
+    location.reload();
 
-    }
+}
