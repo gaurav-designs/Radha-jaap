@@ -62,47 +62,32 @@ updateScreen();
 
 // Jaap Button
 
-document.getElementById("jaapBtn").addEventListener("click",function(){
+document.getElementById("jaapBtn").addEventListener("click", function () {
 
-const music = document.getElementById("bgMusic");
+    const music = document.getElementById("bgMusic");
 
-if (music && music.paused) {
-    music.play().catch(() => {});
-}
-} catch (e) {
-    console.log(e);
-}
-    count++;
-
-    mala++;
-
-
-    if(mala >= 108){
-
-        mala = 0;
-
+    if (music && music.paused) {
+        music.play().catch(() => {});
     }
 
+    count++;
+    mala++;
+
+    if (mala >= 108) {
+        mala = 0;
+    }
 
     history[today]++;
 
-
-    localStorage.setItem("jaapCount",count);
-
-    localStorage.setItem("malaCount",mala);
-
-    localStorage.setItem("history",JSON.stringify(history));
-
+    localStorage.setItem("jaapCount", count);
+    localStorage.setItem("malaCount", mala);
+    localStorage.setItem("history", JSON.stringify(history));
 
     updateScreen();
 
-
-    if(navigator.vibrate){
-
+    if (navigator.vibrate) {
         navigator.vibrate(40);
-
     }
-
 
 });
 
