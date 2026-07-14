@@ -66,10 +66,9 @@ document.getElementById("jaapBtn").addEventListener("click",function(){
 
 const music = document.getElementById("bgMusic");
 
-try {
-    if (music && music.paused) {
-        music.play();
-    }
+if (music && music.paused) {
+    music.play().catch(() => {});
+}
 } catch (e) {
     console.log(e);
 }
